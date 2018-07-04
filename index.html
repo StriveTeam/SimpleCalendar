@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/simple-calendar.css">
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+        }
+        *{
+            padding: 0;
+            margin: 0;
+        }
+
+        .clearflx:after {
+            content: "";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+
+        .badge-important {
+            background-color: #FB6B5B;
+        }
+
+        .badge {
+            padding-right: 9px;
+            padding-left: 9px;
+            -webkit-border-radius: 9px;
+            -moz-border-radius: 9px;
+            border-radius: 9px;
+        }
+
+        .label, .badge {
+            display: inline-block;
+            padding: 2px 4px;
+            font-size: 11.844px;
+            font-weight: bold;
+            line-height: 14px;
+            color: #ffffff;
+            text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+            white-space: nowrap;
+            vertical-align: baseline;
+            background-color: #FB6B5B;
+        }
+
+        .sc-calendar{
+            box-shadow: none;
+            border-top:1px solid #f5d838;
+        }
+        .sc-header{
+            height: 46px;
+            background: #f5f5f5;
+            padding-top: 10px;
+        }
+        .sc-actions{
+            height: 28px;
+            padding: 0 10px;
+            border: 1px solid #afafb3;
+            border-radius: 28px;
+            margin-left: 10px;
+        }
+        .sc-actions div{
+            padding-bottom: 0;
+            line-height: 1em;
+        }
+
+        .sc-item {
+            height: 20%;
+            color: #646466;
+        }
+        .sc-week{
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .sc-week-item {
+            background: #ffffff;
+            border: none;
+            font-size: 16px;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .sc-week-item:nth-child(7n), .sc-week-item:nth-child(7n+6) {
+            color: #333 !important;
+        }
+
+        .sc-item:nth-child(7n) .day, .sc-item:nth-child(7n+6) .day {
+            color: #646466;
+        }
+        .sc-today{
+            background: none;
+            border-width: 0 0 1px 1px;
+            border-color: #F1EBE4;
+        }
+        .sc-today .day{
+            color: #276cb5 !important;
+        }
+        .badge{
+            min-width: 10px;
+        }
+        .sc-mark{
+            background: none;
+        }
+    </style>
+</head>
+<body>
+<div id="content-wrapper">
+    <div class="inner clearfix">
+        <div style="width: 400px;height:400px;float: left"></div>
+        <div id='calendar'></div>
+    </div>
+</div>
+
+</body>
+</html>
+<script type="text/javascript" src="javascripts/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="javascripts/simple-calendar.js"></script>
+<script type="text/javascript">
+    var myCalendar = new SimpleCalendar('#calendar');
+
+    function showTooltips($this) {
+        var self = $this[0];
+        var text = $this.attr("tips");
+        $.pt({
+            target: self,
+            position: 'l',     //提示框相对目标元素位置 t=top,b=bottom,r=right,l=left
+            align: 'c',        //提示框与目标元素的对齐方式，自动调节箭头显示位置，指向目标元素中间位置
+            content: text
+        });
+    }
+
+    $(document).ready(function () {
+        myCalendar.updateSize('500px', '345px');
+        myCalendar.showLunarFestival(true);
+        myCalendar.addMark('', [{day: '2018-7-17', value: ['wwwq', 'hhhh', 'uuuu', 'iiiii']},
+                                {day: '2018-7-18', value: ['333']},
+                                {day: '2018-8-19', value: ['i666ii']}
+                                ]);
+        // myCalendar.addMark('2018-07-7',"rrrr");
+        // myCalendar.addDelay('2018-05-17', "test");
+        //日历添加点击事件
+        $(".sc-item").on("click", function () {
+            var calYear = $(".sc-select-year option:selected").val();
+            var calMonth = $(".sc-select-month option:selected").val();
+            var calDay = $(this).find(".day").text();
+            console.info("calDay" + calDay + ":calYear+" + calYear + "month" + calMonth);
+            if ($(this).hasClass("sc-othermenth")) {
+                return false;
+                /*if (calDay > 20) {
+                    window.location.href = "/pms/a/workcal/pmWorkCalendar/form?searchDate=" + calYear + "-" + (parseInt(calMonth) - 1) + "-" + calDay;
+                    return false;
+                } else if (calDay < 10) {
+                    window.location.href = "/pms/a/workcal/pmWorkCalendar/form?searchDate=" + calYear + "-" + (parseInt(calMonth) + 1) + "-" + calDay;
+                    return false;
+                }*/
+            }
+            alert(1)
+            //window.location.href = "/pms/a/workcal/pmWorkCalendar/form?searchDate=" + calYear + "-" + calMonth + "-" + calDay;
+        })
+    });
+
+
+    function itemCount(month,year){
+        alert(month+'===='+year)
+           // $.get("/pms/a/workcal/pmWorkCalendar/monthCount?year=" + year + "&month=" + month, function(data) {
+           // var returnMess = $.parseJSON(data);
+           // if (returnMess.messType == "Success") {
+           //     myCalendar.clearMark();
+           //     returnMess = $.parseJSON(returnMess.value);
+           //     var infoArray = new Array();
+           //     for ( var i in returnMess) {
+           //         var info = {};
+           //         info.day = year + '-' + returnMess[i].month + '-' + returnMess[i].day;
+           //         info.value = returnMess[i].count;
+           //         info.delayCount = returnMess[i].delayCount;
+           //         infoArray.push(info);
+           //     }
+           //     myCalendar.addMark('', infoArray,month,year);
+           //     myCalendar.addDelay('', infoArray,month,year);
+
+           // } else {
+           //     alertx(returnMess.message);
+           // }
+           // });
+       }
+
+</script>
